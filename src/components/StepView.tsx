@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Markdown from 'react-markdown';
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Sparkles, CheckCircle2, ExternalLink, ShieldCheck, MapPin, Building2, Globe2, X, FileText, ArrowRight, Tag, AlertCircle, FileSearch, Banknote, Map, Landmark, Database, Users, BookOpen } from "lucide-react";
 import { identifyStakeholders, generateContextualizedPlan, AiContextData } from "../services/geminiService";
@@ -399,9 +400,18 @@ function RecommendationCard({ rec, stepTitle }: { rec: any; stepTitle: string })
                     
                     <div className="flex flex-wrap gap-2 mb-4">
                       {stakeholders.map((sh, idx) => (
-                        <div key={idx} className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-sm font-bold">
-                          {sh}
-                          <button onClick={() => removeStakeholder(idx)} className="hover:bg-blue-200 p-0.5 rounded-full transition-colors">
+                        <div key={idx} className="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 text-blue-700 px-3 py-1.5 rounded-full text-sm font-bold shadow-sm transition-colors hover:bg-blue-100">
+                          <a 
+                            href={`https://duckduckgo.com/?q=${encodeURIComponent(sh + ' official website')}&ia=web`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="hover:underline flex items-center gap-1 cursor-pointer"
+                            title="Search for stakeholder"
+                          >
+                            {sh}
+                            <ExternalLink size={10} className="opacity-70" />
+                          </a>
+                          <button onClick={() => removeStakeholder(idx)} className="hover:bg-blue-200 p-0.5 rounded-full transition-colors ml-1" title="Remove stakeholder">
                             <X size={12} />
                           </button>
                         </div>
@@ -438,29 +448,8 @@ function RecommendationCard({ rec, stepTitle }: { rec: any; stepTitle: string })
                     <h5 className="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-5 flex items-center gap-2">
                       <CheckCircle2 size={16} /> Final Contextualized Plan
                     </h5>
-                    <div className="prose prose-sm prose-slate max-w-none prose-p:leading-relaxed prose-li:leading-relaxed">
-                      {plan.split('\n').map((line, idx) => {
-                        const cleanLine = line.replace(/\*\*/g, '').trim();
-                        if (cleanLine.startsWith('1. The Core Directive:')) {
-                          return <div key={idx} className="mb-4"><strong className="text-ink text-base block mb-1">1. The Core Directive:</strong><p className="text-slate-700">{cleanLine.replace('1. The Core Directive:', '').trim()}</p></div>;
-                        }
-                        if (cleanLine.startsWith('2. Stakeholder Integration:')) {
-                          return <strong key={idx} className="text-ink text-base block mt-6 mb-2">2. Stakeholder Integration:</strong>;
-                        }
-                        if (cleanLine.startsWith('3. Implementation Pathway:')) {
-                          return <strong key={idx} className="text-ink text-base block mt-6 mb-2">3. Implementation Pathway:</strong>;
-                        }
-                        if (cleanLine.match(/^[-*]\s/)) {
-                          return <li key={idx} className="text-slate-700 ml-4 mb-2">{cleanLine.replace(/^[-*]\s/, '')}</li>;
-                        }
-                        if (cleanLine.match(/^\d+\.\s/) && !cleanLine.startsWith('1.') && !cleanLine.startsWith('2.') && !cleanLine.startsWith('3.')) {
-                           return <li key={idx} className="text-slate-700 ml-4 mb-2 list-decimal">{cleanLine.replace(/^\d+\.\s/, '')}</li>;
-                        }
-                        if (cleanLine) {
-                          return <p key={idx} className="text-slate-700 mb-2">{cleanLine}</p>;
-                        }
-                        return null;
-                      })}
+                    <div className="prose prose-sm prose-slate max-w-none prose-p:leading-relaxed prose-li:leading-relaxed prose-headings:text-ink prose-headings:font-bold prose-a:text-blue-600">
+                      <Markdown>{plan}</Markdown>
                     </div>
                   </div>
                   

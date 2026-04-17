@@ -74,7 +74,7 @@ export async function generateContextualizedPlan(
   const targetRecommendation = recommendationPoints.join(' ');
   const finalizedStakeholders = stakeholders.join(', ');
 
-  const prompt = `Actor: ${actor}. Entity: ${entityName}. Target Recommendation: ${targetRecommendation}. Finalized Stakeholders: ${finalizedStakeholders}. Generate a strategic implementation plan for ${entityName} to execute this recommendation. Structure strictly as: 1. The Core Directive: [One sentence]. 2. Stakeholder Integration: [Bullet points defining the operational role of each provided stakeholder]. 3. Implementation Pathway: [A 3-step numbered roadmap].`;
+  const prompt = `Actor: ${actor}. Entity: ${entityName}. Target Recommendation: ${targetRecommendation}. Finalized Stakeholders: ${finalizedStakeholders}. Generate a strategic implementation plan for ${entityName} to execute this recommendation. Structure the output EXACTLY as follows: first, restate the target recommendation exactly as provided. Then, add a double line break and the exact heading "## Multilevel Stakeholder Integration". Below that, briefly explain the operational role each provided stakeholder will play in operationalizing the recommendation, using bullet points.`;
 
   try {
     const response = await ai.models.generateContent({
