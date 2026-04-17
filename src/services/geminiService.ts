@@ -71,10 +71,23 @@ export async function generateContextualizedPlan(
     ? contextData.city ? `${contextData.city}, ${contextData.country}` : contextData.country
     : contextData.partnerType || "the entity";
 
-  const targetRecommendation = recommendationPoints.join(' ');
+  const formattedRecommendations = recommendationPoints.map((rec, i) => `Recommendation ${i + 1}: ${rec}`).join('\n');
   const finalizedStakeholders = stakeholders.join(', ');
 
-  const prompt = `Actor: ${actor}. Entity: ${entityName}. Target Recommendation: ${targetRecommendation}. Finalized Stakeholders: ${finalizedStakeholders}. Generate a strategic implementation plan for ${entityName} to execute this recommendation. Structure the output EXACTLY as follows: first, restate the target recommendation exactly as provided. Then, add a double line break and the exact heading "## Multilevel Stakeholder Integration". Below that, briefly explain the operational role each provided stakeholder will play in operationalizing the recommendation, using bullet points.`;
+  const prompt = `Actor: ${actor}. Entity: ${entityName}.
+Provided Recommendations:
+${formattedRecommendations}
+
+Candidate Stakeholders: ${finalizedStakeholders}
+
+Generate a strategic implementation plan for ${entityName}. For EVERY recommendation provided above, you MUST structure your response EXACTLY as follows:
+
+### [Restate the exact recommendation text here]
+
+[From the Candidate Stakeholders list, select ONLY the specific stakeholders who are in a position to contribute to implementing THIS specific recommendation. For each selected stakeholder, provide a bullet point formatted exactly like this:]
+* **[Stakeholder Name]**: [One-sentence summary of their operational role in regular text.]
+
+[Leave a blank line and repeat this exact block for the next recommendation.]`;
 
   try {
     const response = await ai.models.generateContent({

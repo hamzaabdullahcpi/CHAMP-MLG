@@ -384,7 +384,7 @@ function RecommendationCard({ rec, stepTitle }: { rec: any; stepTitle: string })
                     {isIdentifying ? (
                       <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Identifying Stakeholders...</>
                     ) : (
-                      <><Tag size={16} /> Phase 1: Identify Stakeholders</>
+                      <><Tag size={16} /> Identify MLG Stakeholders</>
                     )}
                   </button>
                 </div>
@@ -394,7 +394,7 @@ function RecommendationCard({ rec, stepTitle }: { rec: any; stepTitle: string })
                 <div className="space-y-6">
                   <div className="bg-white p-5 rounded-xl border border-slate-200">
                     <h5 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                      <Tag size={16} className="text-blue-500" /> Mandatory Institutional Stakeholders
+                      <Tag size={16} className="text-blue-500" /> Key Stakeholders
                     </h5>
                     <p className="text-xs text-slate-500 mb-4">Review and edit the stakeholders identified from the report. Add new ones by typing and pressing Enter.</p>
                     
@@ -436,26 +436,64 @@ function RecommendationCard({ rec, stepTitle }: { rec: any; stepTitle: string })
                     {isGenerating ? (
                       <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Generating Plan...</>
                     ) : (
-                      <><Sparkles size={16} /> Phase 2: Generate Contextualized Plan</>
+                      <><Sparkles size={16} /> Know more about stakeholders' roles across recommendations</>
                     )}
                   </button>
                 </div>
               )}
 
               {phase === 'plan' && plan && (
-                <div className="mt-2 space-y-4">
-                  <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-6">
-                    <h5 className="text-sm font-bold text-emerald-800 uppercase tracking-wider mb-5 flex items-center gap-2">
-                      <CheckCircle2 size={16} /> Final Contextualized Plan
-                    </h5>
-                    <div className="prose prose-sm prose-slate max-w-none prose-p:leading-relaxed prose-li:leading-relaxed prose-headings:text-ink prose-headings:font-bold prose-a:text-blue-600">
-                      <Markdown>{plan}</Markdown>
+                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden mt-6 mb-4">
+                  <div className="bg-emerald-50 border-b border-emerald-100 p-5 md:p-6 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-xl shadow-sm">
+                        <CheckCircle2 size={24} />
+                      </div>
+                      <div>
+                        <h2 className="text-lg font-bold text-emerald-950">MLG Stakeholders' Roles</h2>
+                        <p className="text-sm text-emerald-700">We have mapped the critical institutional partners necessary to operationalize each recommendation, defining their precise strategic responsibilities.</p>
+                      </div>
                     </div>
                   </div>
                   
-                  <button onClick={() => {setPhase('setup'); setPlan(null); setStakeholders([]);}} className="text-xs font-bold text-slate-500 hover:text-ink underline underline-offset-2">
-                    Start Over
-                  </button>
+                  <div className="p-5 md:p-8 space-y-10">
+                    <Markdown
+                      components={{
+                        h3: ({node, ...props}) => (
+                          <h3 className="font-bold text-ink text-lg flex items-start gap-3 leading-snug border-none pb-0 mb-2 mt-8 first:mt-0" {...props}>
+                            <span className="text-emerald-500 mt-0.5"><CheckCircle2 size={20} /></span>
+                            <span>{props.children}</span>
+                          </h3>
+                        ),
+                        h4: ({node, ...props}) => (
+                          <h4 className="font-bold text-xs text-slate-500 uppercase tracking-widest mt-6 mb-5 flex items-center gap-2 border-b border-slate-100 pb-3" {...props}>
+                            <Users size={16} className="text-blue-500" />
+                            {props.children}
+                          </h4>
+                        ),
+                        ul: ({node, ...props}) => <ul className="space-y-3 pl-0" {...props} />,
+                        li: ({node, ...props}) => (
+                          <li className="flex items-start gap-3 bg-slate-50 border border-slate-200/60 rounded-xl p-4 text-sm text-slate-700 shadow-sm transition-all hover:bg-slate-100 hover:border-slate-300" {...props}>
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0 shadow-sm" />
+                            <div className="flex-1 leading-relaxed">{props.children}</div>
+                          </li>
+                        ),
+                        p: ({node, ...props}) => <span className="block mb-2 last:mb-0" {...props} />,
+                        strong: ({node, ...props}) => <strong className="font-bold text-slate-900 text-[14px]" {...props} />
+                      }}
+                    >
+                      {plan}
+                    </Markdown>
+                  </div>
+
+                  <div className="bg-slate-50 p-4 border-t border-slate-100 flex justify-center">
+                    <button 
+                      onClick={() => {setPhase('setup'); setPlan(null); setStakeholders([]);}} 
+                      className="text-sm font-bold text-slate-500 hover:text-ink transition-colors flex items-center justify-center gap-2 px-4 py-2 rounded-lg hover:bg-slate-200"
+                    >
+                      <ArrowRight size={16} className="rotate-180" /> Start Over
+                    </button>
+                  </div>
                 </div>
               )}
 
