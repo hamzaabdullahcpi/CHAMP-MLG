@@ -40,9 +40,7 @@ export async function identifyStakeholders(
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3.1-pro-preview",
-      contents: [
-        { role: 'user', parts: [{ text: prompt }] }
-      ],
+      contents: prompt,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         temperature: 0.2,
@@ -51,13 +49,14 @@ export async function identifyStakeholders(
 
     const text = response.text;
     if (!text) {
-      throw new Error("No text returned from Gemini API");
+      throw new Error("The AI returned an empty response. This might be due to safety filters.");
     }
 
     return text.split(',').map(s => s.trim()).filter(s => s.length > 0);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error calling Gemini API for stakeholders:", error);
-    throw new Error("Failed to identify stakeholders.");
+    const message = error?.message || "Unknown error";
+    throw new Error(`Failed to identify stakeholders: ${message}`);
   }
 }
 
@@ -80,9 +79,7 @@ export async function generateContextualizedPlan(
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3.1-pro-preview",
-      contents: [
-        { role: 'user', parts: [{ text: prompt }] }
-      ],
+      contents: prompt,
       config: {
         systemInstruction: SYSTEM_INSTRUCTION,
         temperature: 0.5,
@@ -91,13 +88,14 @@ export async function generateContextualizedPlan(
 
     const text = response.text;
     if (!text) {
-      throw new Error("No text returned from Gemini API");
+      throw new Error("The AI returned an empty response.");
     }
 
     return text;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error calling Gemini API for plan generation:", error);
-    throw new Error("Failed to generate contextualized plan.");
+    const message = error?.message || "Unknown error";
+    throw new Error(`Failed to generate contextualized plan: ${message}`);
   }
 }
 
