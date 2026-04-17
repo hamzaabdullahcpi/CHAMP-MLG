@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
+  --font-heading: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, sans-serif;
+  
+  --color-pastel-blue: #e0f2fe;
+  --color-pastel-emerald: #d1fae5;
+  --color-pastel-amber: #fef3c7;
+  --color-pastel-purple: #f3e8ff;
+  --color-pastel-rose: #ffe4e6;
+  
+  --color-ink: #0f172a;
+  --color-paper: #f8fafc;
+  --color-surface: #ffffff;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
